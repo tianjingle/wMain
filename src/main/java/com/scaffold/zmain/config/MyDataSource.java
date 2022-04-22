@@ -4,7 +4,6 @@ import com.alibaba.druid.pool.DruidDataSource;
 import com.alibaba.druid.pool.DruidPooledConnection;
 
 import java.sql.SQLException;
-import java.util.List;
 
 /**
  * @Author tianjl
@@ -18,8 +17,11 @@ public class MyDataSource extends DruidDataSource {
 
     private boolean isNoun;
 
-    public MyDataSource(boolean isNoun){
+    private MyConfig myConfig;
+
+    public MyDataSource(boolean isNoun, MyConfig myConfig){
         this.isNoun=isNoun;
+        this.myConfig=myConfig;
     }
 
 
@@ -52,9 +54,7 @@ public class MyDataSource extends DruidDataSource {
     public DruidPooledConnection getConnection() throws SQLException {
         //这块可以写具体得库选择逻辑，读库随机可以从用random方法。
         if (this.isNoun) {
-            noun = getDruidDataSource("jdbc:mysql://119.29.96.71:3306/noun?useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&transformedBitIsBoolean=true", "zMain", "P@$$W0rd");
-        }else{
-            noun = getDruidDataSource("jdbc:mysql://119.29.96.71:3306/user?useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&transformedBitIsBoolean=true", "zMain", "P@$$W0rd");
+            noun = getDruidDataSource(myConfig.getDb(), myConfig.getUser(), myConfig.getPassword());
         }
         return noun.getConnection();
     }

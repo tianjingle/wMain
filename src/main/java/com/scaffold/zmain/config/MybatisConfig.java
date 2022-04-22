@@ -1,10 +1,9 @@
 package com.scaffold.zmain.config;
 
-import com.scaffold.zmain.db.user.mapper.TwoMapper;
 import org.mybatis.spring.SqlSessionFactoryBean;
-import org.mybatis.spring.mapper.MapperFactoryBean;
 import org.mybatis.spring.mapper.MapperScannerConfigurer;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
@@ -21,10 +20,11 @@ public class MybatisConfig {
 
 
     @Bean(name = "dataBaseNoun")
-    public SqlSessionFactoryBean getSqlSessionFactoryOne1() throws Exception {
+    @ConditionalOnClass(value = MyConfig.class)
+    public SqlSessionFactoryBean getSqlSessionFactoryOne1(MyConfig myConfig) throws Exception {
         //xml和实体的映射
         SqlSessionFactoryBean sqlSessionFactoryBean=new SqlSessionFactoryBean();
-        sqlSessionFactoryBean.setDataSource(new MyDataSource(true));
+        sqlSessionFactoryBean.setDataSource(new MyDataSource(true,myConfig));
         sqlSessionFactoryBean.setTypeAliasesPackage("com.scaffold.zmain.db.noun");
         Resource[] resources = new Resource[]{
                 new ClassPathResource("mybatis/noun/OneMapper.xml"),
@@ -36,10 +36,10 @@ public class MybatisConfig {
 
 
     @Bean(name = "dataBaseUser")
-    public SqlSessionFactoryBean getSqlSessionFactoryUser() throws Exception {
+    public SqlSessionFactoryBean getSqlSessionFactoryUser(MyConfig myConfig) throws Exception {
         //xml和实体的映射
         SqlSessionFactoryBean sqlSessionFactoryBean=new SqlSessionFactoryBean();
-        sqlSessionFactoryBean.setDataSource(new MyDataSource(true));
+        sqlSessionFactoryBean.setDataSource(new MyDataSource(true, myConfig));
         sqlSessionFactoryBean.setTypeAliasesPackage("com.scaffold.zmain.db.user");
         Resource[] resources = new Resource[]{
                 new ClassPathResource("mybatis/user/TwoMapper.xml")};
