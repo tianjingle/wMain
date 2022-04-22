@@ -190,9 +190,10 @@ public class HomeController {
         if (!CollectionUtils.isEmpty(result)){
             clickTime=result.get(0).getCollect_date();
         }
-        String path="C:\\Users\\Administrator\\PycharmProjects\\sMain\\src\\industry_result.txt";
-        JSONObject jsonObject= JSON.parseObject(readJsonFile(new File(path)));
-        JSONArray buyList=jsonObject.getJSONArray("buy");
+        //概念板块，待优化
+//        String path="C:\\Users\\Administrator\\PycharmProjects\\sMain\\src\\industry_result.txt";
+//        JSONObject jsonObject= JSON.parseObject(readJsonFile(new File(path)));
+//        JSONArray buyList=jsonObject.getJSONArray("buy");
         List<String> buys=new ArrayList<>();
 //        for (int i = 0; i < buyList.size(); i++) {
 //            buys.add((String) buyList.get(i));
