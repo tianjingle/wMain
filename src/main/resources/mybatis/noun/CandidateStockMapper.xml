@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.scaffold.zmain.db.noun.mapper.CandidateStockMapper">
+
+    <select id="findAll" resultType="com.scaffold.zmain.db.noun.CandidateStockPo">
+        select * from candidate_stock where collect_date='${currentDate}'
+    </select>
+
+    <select id="queryByCode" resultType="com.scaffold.zmain.db.noun.CandidateStockPo">
+        select * from candidate_stock where code='${code}' limit 1
+    </select>
+
+    <select id="todayDate" resultType="com.scaffold.zmain.db.noun.CandidateStockPo">
+        select * from candidate_stock where collect_date <![CDATA[ <= ]]> '${key}' order by collect_date desc limit 1
+    </select>
+
+    <select id="timeLimit" resultType="java.lang.String">
+        select distinct(collect_date) from noun.candidate_stock order by collect_date desc limit #{limit}
+    </select>
+
+    <select id="findRecent"  resultType="com.scaffold.zmain.db.noun.CandidateStockPo">
+        select * from candidate_stock where collect_date  <![CDATA[ >= ]]>  '${date}' and zsm  <![CDATA[ >= ]]> 0
+    </select>
+
+    <select id="findAllTemp" resultType="com.scaffold.zmain.db.noun.CandidateStockPo">
+        select * from candidate_stock
+    </select>
+</mapper>

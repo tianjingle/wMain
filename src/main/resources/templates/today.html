@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>today</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="https://cdn.jsdelivr.net/npm/@bootcss/v3.bootcss.com@1.0.17/favicon.ico">
+    <link rel="canonical" href="https://getbootstrap.com/docs/3.4/examples/jumbotron-narrow/">
+
+    <title>Narrow Jumbotron Template for Bootstrap</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/@bootcss/v3.bootcss.com@1.0.17/dist/css/bootstrap.min.css"
+          rel="stylesheet">
+
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <link href="https://cdn.jsdelivr.net/npm/@bootcss/v3.bootcss.com@1.0.17/assets/css/ie10-viewport-bug-workaround.css"
+          rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="https://cdn.jsdelivr.net/npm/@bootcss/v3.bootcss.com@1.0.17/examples/jumbotron-narrow/jumbotron-narrow.css"
+          rel="stylesheet">
+
+    <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
+    <!--[if lt IE 9]>
+    <script src="https://cdn.jsdelivr.net/npm/@bootcss/v3.bootcss.com@1.0.17/assets/js/ie8-responsive-file-warning.js"></script>
+    <![endif]-->
+    <script src="https://cdn.jsdelivr.net/npm/@bootcss/v3.bootcss.com@1.0.17/assets/js/ie-emulation-modes-warning.js"></script>
+    <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+</head>
+<body>
+<div class="container">
+    <div class="header clearfix">
+        <nav>
+            <ul class="nav nav-pills pull-right">
+                <li role="presentation"><a href="/zMain/today">Get</a></li>
+                <li role="presentation"><a href="/zMain/dapan">Big-A</a></li>
+                <li role="presentation"><a href="/zMain/about">About</a></li>
+            </ul>
+        </nav>
+        <h3 class="text-muted"><a href="/zMain/">zMain</a></h3>
+    </div>
+    <h4 style="color: red" align="center">免责申明:</h4>
+    <p style="color: red" align="center">以下结果仅供量化技术学习，不构成投资建议，如果您依据以下结论实盘投资，需自行承担盈亏。</p>
+
+    <ul class="breadcrumb">
+        <li th:each="stock:${time}"><a th:text="${stock.time}"
+                                       th:href="@{'/today?day='+${stock.flag}+''+${stock.key}}"></a></li>
+    </ul>
+
+    <div class="bs-example">
+        <p>
+            <a th:text="'分水线'+${clickTime}+''" class="btn btn-primary collapsed" role="button"
+               data-toggle="collapse" href="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+            </a>
+            <a th:text="'旺角动力'+${clickTime}+''" class="btn btn-primary collapsed" role="button" data-toggle="collapse"
+               href="#collapseExampleWJDL" aria-expanded="false" aria-controls="collapseExample">
+            </a>
+            <a th:text="'一鼓作气'+${clickTime}+''" class="btn btn-primary collapsed" role="button"
+               data-toggle="collapse" href="#collapseExampleZQ" aria-expanded="false" aria-controls="collapseExample">
+            </a>
+            <a th:text="'好望角'+${clickTime}+''" class="btn btn-primary collapsed" role="button"
+               data-toggle="collapse" href="#collapseExampleTDX" aria-expanded="false" aria-controls="collapseExample">
+            </a>
+            <a class="btn btn-warning collapsed" role="button" th:href="@{'/about'+${isMe}}" target="_blank">胜率</a>
+        </p>
+
+        <ul class="breadcrumb">
+            <li th:each="pt:${concept}"><a th:text="${pt}"th:href="@{'/concept?name='+${pt}}"></a></li>
+        </ul>
+
+        <div class="collapse" id="collapseExampleConcept" aria-expanded="true" style="height: 0px;">
+            <div class="well">
+                概念
+                <ul class="nav nav-pills" role="tablist" id="concept">
+                    <li th:each="pt:${concept}" role="presentation">
+                        <a th:text="${pt}"th:href="@{'/concept?name='+${pt}}"></a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="collapse" id="collapseExample" aria-expanded="false" style="height: 0px;">
+            <div class="well">
+                分水线
+                <ul class="nav nav-pills" role="tablist" id="industry">
+                    <li th:each="indus:${industry}" role="presentation">
+                        <a th:text="@{${indus.industry}+'('+${indus.count}+')'}"></a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="collapse" id="collapseExampleWJDL" aria-expanded="false" style="height: 0px;">
+            <div class="well">
+                旺角动力
+                <ul class="nav nav-pills" role="tablist" id="industryWJDL">
+                    <li th:each="indus:${industryWJDL}" role="presentation">
+                        <a th:text="@{${indus.industry}+'('+${indus.count}+')'}"></a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="collapse" id="collapseExampleZQ" aria-expanded="false" style="height: 0px;">
+            <div class="well">
+                一鼓作气
+                <ul class="nav nav-pills" role="tablist" id="industry">
+                    <li th:each="indus:${industryZQ}" role="presentation">
+                        <a th:text="@{${indus.industry}+'('+${indus.count}+')'}"></a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="collapse" id="collapseExampleTDX" aria-expanded="false" style="height: 0px;">
+            <div class="well">
+                好望角
+                <ul class="nav nav-pills" role="tablist" id="industry">
+                    <li th:each="indus:${industryTdx}" role="presentation">
+                        <a th:text="@{${indus.industry}+'('+${indus.count}+')'}"></a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+
+    </div>
+
+
+    <div class="row marketing">
+
+        <ul id="myTab" class="nav nav-tabs">
+            <li class="active"><a href="#ios" data-toggle="tab">分水岭</a></li>
+            <li><a href="#jmeter" data-toggle="tab">一鼓作气</a></li>
+            <li><a href="#wjdl" data-toggle="tab">旺角动力</a></li>
+            <li><a href="#home" data-toggle="tab">好望角</a></li>
+            <li><a href="#dl" data-toggle="tab">纯动力</a></li>
+
+        </ul>
+        <div id="myTabContent" class="tab-content">
+            <div class="tab-pane fade in active" id="ios">
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th>code</th>
+                            <th>名称</th>
+                            <th>行业</th>
+                            <th>价格</th>
+                            <th>压缩系数</th>
+                            <th>GD</th>
+
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="stock:${shui}">
+                            <td><a th:text="${stock.code}" th:href="@{'/detail/'+${stock.showCode}}"
+                                   target="_blank"></a></td>
+                            <td><a th:text="${stock.name}" th:href="@{'/detail/'+${stock.showCode}}"
+                                   target="_blank"></a></td>
+                            <td th:text="${stock.industry}"></td>
+                            <td th:text="${stock.price}"></td>
+                            <td th:text="${stock.cv}"></td>
+
+                            <td th:if="${stock.gudong} eq 1"><font color="#FF0000">减少</font> </td>
+                            <td th:if="${stock.gudong} eq 0">-</td>
+
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="jmeter">
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th>code</th>
+                            <th>名称</th>
+                            <th>行业</th>
+                            <th>价格</th>
+                            <th>压缩系数</th>
+                            <th>GD</th>
+
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="stock:${gu}">
+                            <td><a th:text="${stock.code}" th:href="@{'/detail/'+${stock.showCode}}"
+                                   target="_blank"></a></td>
+                            <td><a th:text="${stock.name}" th:href="@{'/detail/'+${stock.showCode}}"
+                                   target="_blank"></a></td>
+                            <td th:text="${stock.industry}"></td>
+                            <td th:text="${stock.price}"></td>
+                            <td th:text="${stock.cv}"></td>
+                            <td th:if="${stock.gudong} eq 1"><font color="#FF0000">减少</font> </td>
+                            <td th:if="${stock.gudong} eq 0">-</td>
+
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="wjdl">
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th>code</th>
+                            <th>名称</th>
+                            <th>行业</th>
+                            <th>价格</th>
+                            <th>GD</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="stock:${wjdl}">
+                            <td><a th:text="${stock.code}" th:href="@{'/detail/'+${stock.showCode}}"
+                                   target="_blank"></a></td>
+                            <td><a th:text="${stock.name}" th:href="@{'/detail/'+${stock.showCode}}"
+                                   target="_blank"></a></td>
+                            <td th:text="${stock.industry}"></td>
+                            <td th:text="${stock.price}"></td>
+                            <td th:if="${stock.gudong} eq 1"><font color="#FF0000">减少</font> </td>
+                            <td th:if="${stock.gudong} eq 0">-</td>
+
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="home">
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th>code</th>
+                            <th>名称</th>
+                            <th>行业</th>
+                            <th>价格</th>
+                            <th>wyh</th>
+                            <th>GD</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="stock:${list}">
+                            <td><a th:text="${stock.code}" th:href="@{'/detail/'+${stock.showCode}}"
+                                   target="_blank"></a></td>
+                            <td><a th:text="${stock.name}" th:href="@{'/detail/'+${stock.showCode}}"
+                                   target="_blank"></a></td>
+                            <td th:text="${stock.industry}"></td>
+                            <td th:text="${stock.price}"></td>
+                            <td th:text="${stock.wenyuRiver}"></td>
+                            <td th:if="${stock.gudong} eq 1"><font color="#FF0000">减少</font> </td>
+                            <td th:if="${stock.gudong} eq 0">-</td>
+
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="dl">
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th>code</th>
+                            <th>名称</th>
+                            <th>行业</th>
+                            <th>价格</th>
+                            <th>GD</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="stock:${dl}">
+                            <td><a th:text="${stock.code}" th:href="@{'/detail/'+${stock.showCode}}"
+                                   target="_blank"></a></td>
+                            <td><a th:text="${stock.name}" th:href="@{'/detail/'+${stock.showCode}}"
+                                   target="_blank"></a></td>
+                            <td th:text="${stock.industry}"></td>
+                            <td th:text="${stock.price}"></td>
+                            <td th:if="${stock.gudong} eq 1"><font color="#FF0000">减少</font> </td>
+                            <td th:if="${stock.gudong} eq 0">-</td>
+
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <footer class="footer">
+        <p>© 2022 zMain, Inc.</p>
+    </footer>
+</div>
+</body>
+</html>

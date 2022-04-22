@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <meta charset="UTF-8">
+  <title>today</title>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <link rel="icon" href="https://cdn.jsdelivr.net/npm/@bootcss/v3.bootcss.com@1.0.17/favicon.ico">
+  <link rel="canonical" href="https://getbootstrap.com/docs/3.4/examples/jumbotron-narrow/">
+
+  <title>Narrow Jumbotron Template for Bootstrap</title>
+
+  <!-- Bootstrap core CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/@bootcss/v3.bootcss.com@1.0.17/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+  <link href="https://cdn.jsdelivr.net/npm/@bootcss/v3.bootcss.com@1.0.17/assets/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
+
+  <!-- Custom styles for this template -->
+  <link href="https://cdn.jsdelivr.net/npm/@bootcss/v3.bootcss.com@1.0.17/examples/jumbotron-narrow/jumbotron-narrow.css" rel="stylesheet">
+
+  <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
+  <!--[if lt IE 9]><script src="https://cdn.jsdelivr.net/npm/@bootcss/v3.bootcss.com@1.0.17/assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+  <script src="https://cdn.jsdelivr.net/npm/@bootcss/v3.bootcss.com@1.0.17/assets/js/ie-emulation-modes-warning.js"></script>
+<!--      <script src="/zMain/static/js/echarts.js"></script>-->
+  <script src="https://cdn.bootcdn.net/ajax/libs/echarts/5.1.2/echarts.js"></script>
+  <script src="/zMain/static/js/jquery-3.5.1.min.js"></script>
+</head>
+<body>
+<div class="container">
+  <div class="header clearfix">
+    <nav>
+      <ul class="nav nav-pills pull-right">
+        <li role="presentation"><a href="/zMain/today">Get</a></li>
+        <li role="presentation"><a href="/zMain/dapan">Big-A</a></li>
+        <li role="presentation"><a href="/zMain/about">About</a></li>
+      </ul>
+    </nav>
+    <h3 class="text-muted"><a  href="/zMain/">zMain</a></h3>
+  </div>
+
+
+  <div class="bs-docs-section">
+    <div class="bs-callout bs-callout-warning" id="callout-inputgroup-form-labels">
+      <h4>what`s zMain?</h4>
+      <p>从最开始摸索到如何获取数据，到如何画k线图，到最后如何开发一个脚本到zMain.现有三个策略，分别事分水岭，一鼓作气以及好望角。zMain还不够完善，但是zMain也在不断的前进。</p>
+      <div id="tian" style="width: 100%;height: 300px;"></div>
+    </div>
+
+    <div class="bs-callout bs-callout-warning" id="callout-inputgroup-form-labels1">
+      <h4>Contribute zMain?</h4>
+      <p style="color: red" align="center">如果您觉得zMain对您的投资有些许帮助，欢迎您对zMain进行一些简单的捐赠.</p>
+
+      <div class="row show-grid">
+        <div class="col-md-4"></div>
+        <div class="col-md-4">
+          <div class="thumbnail">
+          <img src="/zMain/file/contribute" alt="">
+        </div></div>
+        <div class="col-md-4"></div>
+      </div>
+      <p align="center">感谢您对我们的认可！</p>
+    </div>
+  </div>
+  <footer class="footer">
+    <p>© 2021 zMain, Inc.</p>
+  </footer>
+</div>
+<script type="text/javascript">
+  var chartDom = document.getElementById('tian');
+  var myChart = echarts.init(chartDom);
+
+  $.ajax({
+    type: 'GET',
+    url: "/zMain/tongji",
+    success: function(data){
+      listh=[]
+      lists=[]
+      listy=[]
+      listw=[]
+      x=[]
+      x=data[0]['time']
+      for (let i = 0; i < data[0]['history'].length; i++) {
+        listh.push(data[0]['history'][i].toFixed(2))
+      }
+
+      for (let i = 0; i < data[1]['history'].length; i++) {
+        lists.push(data[1]['history'][i].toFixed(2))
+      }
+      for (let i = 0; i < data[2]['history'].length; i++) {
+        listy.push(data[2]['history'][i].toFixed(2))
+      }
+      var option = {
+        xAxis: {
+          type: 'category',
+          boundaryGap: false,
+          data: x
+        },
+        tooltip: {
+          trigger: 'axis'
+        },
+        toolbox: {
+          feature: {
+            saveAsImage: {}
+          }
+        },
+        title: {
+          text: '胜率(时间/胜率)'
+        },
+        yAxis: {
+          type: 'value'
+        },
+
+        legend: {
+          data: ['好望角', '分水岭', '一鼓作气']
+        },
+        series: [
+          {
+            name: '好望角',
+            data: listh,
+            type: 'line',
+            smooth: true
+          },
+          {
+            name:'分水岭',
+            data: lists,
+            type: 'line',
+            smooth: true
+          },
+          {
+            name:'一鼓作气',
+            data: listy,
+            type: 'line',
+            smooth: true
+          }
+        ]
+      };
+      myChart.setOption(option);
+    },
+    error: function(){
+      alert("发送失败")
+    }
+  })
+
+
+
+
+
+</script>
+
+</body>
+
+</html>

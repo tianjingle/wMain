@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <meta charset="UTF-8">
+    <title>today</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="https://cdn.jsdelivr.net/npm/@bootcss/v3.bootcss.com@1.0.17/favicon.ico">
+    <link rel="canonical" href="https://getbootstrap.com/docs/3.4/examples/jumbotron-narrow/">
+
+    <title>Narrow Jumbotron Template for Bootstrap</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/@bootcss/v3.bootcss.com@1.0.17/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <link href="https://cdn.jsdelivr.net/npm/@bootcss/v3.bootcss.com@1.0.17/assets/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="https://cdn.jsdelivr.net/npm/@bootcss/v3.bootcss.com@1.0.17/examples/jumbotron-narrow/jumbotron-narrow.css" rel="stylesheet">
+
+    <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
+    <!--[if lt IE 9]><script src="https://cdn.jsdelivr.net/npm/@bootcss/v3.bootcss.com@1.0.17/assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+    <script src="https://cdn.jsdelivr.net/npm/@bootcss/v3.bootcss.com@1.0.17/assets/js/ie-emulation-modes-warning.js"></script>
+
+</head>
+<body>
+<div class="container">
+    <div class="header clearfix">
+        <nav>
+            <ul class="nav nav-pills pull-right">
+                <li role="presentation"><a href="/zMain/today">Get</a></li>
+                <li role="presentation"><a href="/zMain/dapan">Big-A</a></li>
+                <li role="presentation"><a href="/zMain/about">About</a></li>
+            </ul>
+        </nav>
+        <h3 class="text-muted"><a  href="/zMain/">zMain</a></h3>
+    </div>
+
+
+    <div class="row">
+        <h4 style="color: red" align="center">免责申明:</h4>
+        <p  style="color: red" align="center">以下结果仅供量化技术学习，不构成投资建议，如果您依据以下结论实盘投资，需自行承担盈亏。</p>
+
+        <div class="thumbnail">
+                <img th:src="${po.image}" alt="">
+                <div class="caption">
+                    <h3 th:text="${po.name}"></h3>
+                    <h5 th:text="@{'价格:'+${po.price}+'元&nbsp;&nbsp;&nbsp;&nbsp;行业:'+${po.industry}}"></h5>
+                    <p align="center">
+                        <a th:href="${dfcf}"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></a>
+                    </p>
+                    <div th:if="${po.zsm} eq '3'">
+                        <h4 align="center">通达信主力吸筹买点出现！</h4>
+                    </div>
+                    <div th:if="${po.zsm} eq '2'">
+                        <h4 align="center">多空分水岭出现！</h4>
+                    </div>
+                    <div th:if="${po.zsm} eq '1'">
+                        <h4 align="center">上升中的反弹买点出现！</h4>
+                    </div>
+
+<!--                    <p><a href="#" class="btn btn-primary" role="button">Button</a> <a href="#" class="btn btn-default" role="button">Button</a></p>-->
+                </div>
+            </div>
+    </div>
+    <footer class="footer">
+        <p>© 2022 zMain, Inc.</p>
+    </footer>
+</div>
+</body>
+</html>
