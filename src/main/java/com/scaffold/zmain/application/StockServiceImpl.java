@@ -162,6 +162,7 @@ public class StockServiceImpl implements StockService {
                 showTimeVos.add(new ShowTimeVo(showTime.get(i),i));
             }
             showTimeCache.putIfAbsent(key,showTimeVos);
+            tongjiCache.clear();
             doTongji();
             return showTimeVos;
         }
@@ -175,6 +176,7 @@ public class StockServiceImpl implements StockService {
         List<Double> w=new ArrayList<>();
         List<Double> wjdl=new ArrayList<>();
         List<Double> dl=new ArrayList<>();
+        List<Double> fanzhuandongli=new ArrayList<>();
         Integer [] skip=new Integer[]{6,8,11,15,20,26,33,40,60};
 
         for (int i = 0; i < skip.length; i++) {
@@ -195,6 +197,8 @@ public class StockServiceImpl implements StockService {
             int wjdltotal=0;
             int mydl=0;
             int mydltotal=0;
+            int myfanzhuandongli=0;
+            int myfanzhuandonglitotal=0;
             for (int j = 0; j < list.size(); j++) {
                 switch (list.get(j).getZsm()){
                     case 1:
@@ -243,6 +247,14 @@ public class StockServiceImpl implements StockService {
                         }
                         if (list.get(j).getProfit()!=0) {
                             mydltotal = mydltotal + 1;
+                        }
+                        break;
+                    case 99:
+                        if (list.get(j).getProfit()>0){
+                            myfanzhuandongli=myfanzhuandongli+1;
+                        }
+                        if (list.get(j).getProfit()!=0) {
+                            myfanzhuandonglitotal = myfanzhuandonglitotal + 1;
                         }
                         break;
                     default:
@@ -304,6 +316,16 @@ public class StockServiceImpl implements StockService {
             }else{
                 dl.add(0.0);
             }
+
+            if (myfanzhuandonglitotal!=0){
+                double d = 1.0*myfanzhuandongli/myfanzhuandonglitotal;
+                BigDecimal bd = new BigDecimal(d);
+                BigDecimal bd2 = bd.setScale(2, BigDecimal.ROUND_HALF_UP);
+                Double get_double=Double.parseDouble(bd2.toString());
+                fanzhuandongli.add(get_double);
+            }else{
+                fanzhuandongli.add(0.0);
+            }
         }
         List<Integer> times=Stream.of(skip).collect(Collectors.toList());
 
@@ -336,6 +358,11 @@ public class StockServiceImpl implements StockService {
         vo.setHistory(dl);
         vo.setTime(times);
         tongjiCache.putIfAbsent("dl", vo);
+
+        vo=new TongJiVo();
+        vo.setHistory(fanzhuandongli);
+        vo.setTime(times);
+        tongjiCache.putIfAbsent("fanzhuandongli", vo);
     }
 
     @Override
@@ -351,6 +378,7 @@ public class StockServiceImpl implements StockService {
         tongJiVos.add(tongjiCache.get("wen"));
         tongJiVos.add(tongjiCache.get("wjdl"));
         tongJiVos.add(tongjiCache.get("dl"));
+        tongJiVos.add(tongjiCache.get("fanzhuandongli"));
         return tongJiVos;
     }
 

@@ -88,6 +88,7 @@
       listw=[]
       listwjdl=[]
       listdl=[]
+      listfantanfanzhuan=[]
       x=[]
       x=data[0]['time']
       for (let i = 0; i < data[0]['history'].length; i++) {
@@ -108,6 +109,9 @@
       }
       for (let i = 0; i < data[5]['history'].length; i++) {
         listdl.push(data[5]['history'][i].toFixed(2))
+      }
+      for (let i = 0; i < data[6]['history'].length; i++) {
+        listfantanfanzhuan.push(data[6]['history'][i].toFixed(2))
       }
       var option = {
         xAxis: {
@@ -131,7 +135,7 @@
         },
 
         legend: {
-          data: ['好望角', '分水岭', '一鼓作气', '温榆河', '旺角动力', '纯动力']
+          data: ['好望角', '分水岭', '一鼓作气', '温榆河', '旺角动力', '纯动力', '反弹反转']
         },
         series: [
           {
@@ -167,6 +171,12 @@
           {
             name:'纯动力',
             data: listdl,
+            type: 'line',
+            smooth: true
+          },
+          {
+            name:'反弹反转',
+            data: listfantanfanzhuan,
             type: 'line',
             smooth: true
           }

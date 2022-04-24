@@ -61,6 +61,7 @@
             <a th:text="'分水线'+${clickTime}+''" class="btn btn-primary collapsed" role="button"
                data-toggle="collapse" href="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
             </a>
+
             <a th:text="'旺角动力'+${clickTime}+''" class="btn btn-primary collapsed" role="button" data-toggle="collapse"
                href="#collapseExampleWJDL" aria-expanded="false" aria-controls="collapseExample">
             </a>
@@ -137,6 +138,7 @@
 
         <ul id="myTab" class="nav nav-tabs">
             <li class="active"><a href="#ios" data-toggle="tab">分水岭</a></li>
+            <li><a href="#fantanfanzhuan" data-toggle="tab">反弹反转</a></li>
             <li><a href="#jmeter" data-toggle="tab">一鼓作气</a></li>
             <li><a href="#wjdl" data-toggle="tab">旺角动力</a></li>
             <li><a href="#home" data-toggle="tab">好望角</a></li>
@@ -176,6 +178,39 @@
                     </table>
                 </div>
             </div>
+
+            <div class="tab-pane fade" id="fantanfanzhuan">
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th>code</th>
+                            <th>名称</th>
+                            <th>行业</th>
+                            <th>价格</th>
+                            <th>压缩系数</th>
+                            <th>GD</th>
+
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="stock:${donglifanzhuan}">
+                            <td><a th:text="${stock.code}" th:href="@{'/detail/'+${stock.showCode}}"
+                                   target="_blank"></a></td>
+                            <td><a th:text="${stock.name}" th:href="@{'/detail/'+${stock.showCode}}"
+                                   target="_blank"></a></td>
+                            <td th:text="${stock.industry}"></td>
+                            <td th:text="${stock.price}"></td>
+                            <td th:text="${stock.cv}"></td>
+                            <td th:if="${stock.gudong} eq 1"><font color="#FF0000">减少</font> </td>
+                            <td th:if="${stock.gudong} eq 0">-</td>
+
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
             <div class="tab-pane fade" id="jmeter">
                 <div class="table-responsive">
                     <table class="table table-striped">

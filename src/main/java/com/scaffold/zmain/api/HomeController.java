@@ -93,6 +93,7 @@ public class HomeController {
         List<CandidateStockPo> chundongli=result.stream().filter(c->c.getZsm()==6).sorted(Comparator.comparing(CandidateStockPo::getPrice)).collect(Collectors.toList());
         List<CandidateStockPo> shui=result.stream().filter(c->c.getZsm()==2).sorted(Comparator.comparing(CandidateStockPo::getCv)).collect(Collectors.toList());
         List<CandidateStockPo> gu=result.stream().filter(c->c.getZsm()==1).sorted(Comparator.comparing(CandidateStockPo::getCv)).collect(Collectors.toList());
+        List<CandidateStockPo> donglifanzhuan=result.stream().filter(c->c.getZsm()==99).collect(Collectors.toList());
             //上边是温榆河
             wenyuRiver.forEach(c -> {
                 c.setWenyuRiver(1);
@@ -205,6 +206,7 @@ public class HomeController {
         modelAndView.addObject("industryZQ",industryStastiscVosZQ);
         modelAndView.addObject("wjdl",wangjiaodongli);
         modelAndView.addObject("dl",chundongli);
+        modelAndView.addObject("donglifanzhuan",donglifanzhuan);
         modelAndView.addObject("list",list);
         modelAndView.addObject("shui",shui);
         modelAndView.addObject("gu",gu);
