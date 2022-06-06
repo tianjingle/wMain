@@ -19,7 +19,7 @@
     </select>
 
     <select id="findRecent"  resultType="com.scaffold.zmain.db.noun.CandidateStockPo">
-        select * from candidate_stock where collect_date  <![CDATA[ >= ]]>  '${date}' and zsm  <![CDATA[ >= ]]> 0
+        select * from candidate_stock where collect_date  <![CDATA[ >= ]]>  '${date}' and collect_date != '${now}' and zsm  <![CDATA[ >= ]]> 0
     </select>
 
     <select id="findAllTemp" resultType="com.scaffold.zmain.db.noun.CandidateStockPo">

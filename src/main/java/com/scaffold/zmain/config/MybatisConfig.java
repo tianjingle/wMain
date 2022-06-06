@@ -28,7 +28,8 @@ public class MybatisConfig {
         sqlSessionFactoryBean.setTypeAliasesPackage("com.scaffold.zmain.db.noun");
         Resource[] resources = new Resource[]{
                 new ClassPathResource("mybatis/noun/OneMapper.xml"),
-                new ClassPathResource("mybatis/noun/CandidateStockMapper.xml")};
+                new ClassPathResource("mybatis/noun/CandidateStockMapper.xml"),
+                new ClassPathResource("mybatis/noun/FanzhuanMapper.xml")};
         sqlSessionFactoryBean.setMapperLocations(resources);
         sqlSessionFactoryBean.setPlugins(new MybatisLanjieqi());
         return sqlSessionFactoryBean;

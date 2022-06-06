@@ -51,6 +51,10 @@
     <div class="bs-callout bs-callout-warning" id="callout-inputgroup-form-labels">
       <h4>what`s zMain?</h4>
       <p>从最开始摸索到如何获取数据，到如何画k线图，到最后如何开发一个脚本到zMain.现有三个策略，分别事分水岭，一鼓作气以及好望角。zMain还不够完善，但是zMain也在不断的前进。</p>
+
+      <div id="fanzhuansize" style="width: 100%;height: 100px;"></div>
+      <div id="tian" style="width: 100%;height: 300px;"></div>
+
       <div class="bs-callout bs-callout-warning" id="callout-inputgroup-form-labels1">
         <h4>Contribute zMain?</h4>
         <p style="color: red" align="center">如果您觉得zMain对您的投资有些许帮助，欢迎您对zMain进行一些简单的捐赠.</p>
@@ -65,7 +69,6 @@
         </div>
         <p align="center">感谢您对我们的认可！</p>
       </div>
-      <div id="tian" style="width: 100%;height: 300px;"></div>
     </div>
 
 
@@ -78,6 +81,9 @@
   var chartDom = document.getElementById('tian');
   var myChart = echarts.init(chartDom);
 
+  var fanzhuansizeDom = document.getElementById('fanzhuansize');
+  var fanzhuansizeChart = echarts.init(fanzhuansizeDom);
+
   $.ajax({
     type: 'GET',
     url: "/zMain/tongji",
@@ -89,6 +95,7 @@
       listwjdl=[]
       listdl=[]
       listfantanfanzhuan=[]
+      chaoji=[]
       x=[]
       x=data[0]['time']
       for (let i = 0; i < data[0]['history'].length; i++) {
@@ -113,6 +120,9 @@
       for (let i = 0; i < data[6]['history'].length; i++) {
         listfantanfanzhuan.push(data[6]['history'][i].toFixed(2))
       }
+      for (let i = 0; i < data[7]['history'].length; i++) {
+        chaoji.push(data[7]['history'][i].toFixed(2))
+      }
       var option = {
         xAxis: {
           type: 'category',
@@ -135,7 +145,7 @@
         },
 
         legend: {
-          data: ['好望角', '分水岭', '一鼓作气', '温榆河', '旺角动力', '纯动力', '反弹反转']
+          data: ['好望角', '分水岭', '一鼓作气', '旺角动力', '纯动力', '反弹反转', '动力_反弹_吸筹']
         },
         series: [
           {
@@ -156,12 +166,12 @@
             type: 'line',
             smooth: true
           },
-          {
-            name:'温榆河',
-            data: listw,
-            type: 'line',
-            smooth: true
-          },
+          // {
+          //   name:'温榆河',
+          //   data: listw,
+          //   type: 'line',
+          //   smooth: true
+          // },
           {
             name:'旺角动力',
             data: listwjdl,
@@ -179,6 +189,12 @@
             data: listfantanfanzhuan,
             type: 'line',
             smooth: true
+          },
+          {
+            name:'动力_反弹_吸筹',
+            data: chaoji,
+            type: 'line',
+            smooth: true
           }
         ]
       };
@@ -189,6 +205,57 @@
     }
   })
 
+
+  $.ajax({
+    type: 'GET',
+    url: "/zMain/fanzhuan",
+    success: function(data){
+      listh=[]
+
+      x=[]
+      for (let i = 0; i < data.length; i++) {
+        x.push(data[i]['date'])
+        listh.push(data[i]['count'])
+      }
+      var option = {
+        xAxis: {
+          type: 'category',
+          boundaryGap: false,
+          data: x
+        },
+        tooltip: {
+          trigger: 'axis'
+        },
+        toolbox: {
+          feature: {
+            saveAsImage: {}
+          }
+        },
+        title: {
+          text: '反弹数'
+        },
+        yAxis: {
+          type: 'value'
+        },
+
+        legend: {
+          data: ['反弹数']
+        },
+        series: [
+          {
+            name: '反弹数',
+            data: listh,
+            type: 'line',
+            smooth: true
+          }
+        ]
+      };
+      fanzhuansizeChart.setOption(option);
+    },
+    error: function(){
+      alert("发送失败")
+    }
+  })
 
 
 

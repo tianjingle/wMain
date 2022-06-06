@@ -5,11 +5,12 @@ import com.scaffold.zmain.api.vo.TongJiVo;
 import com.scaffold.zmain.application.service.StockService;
 import com.scaffold.zmain.config.MyConfig;
 import com.scaffold.zmain.db.noun.CandidateStockPo;
+import com.scaffold.zmain.db.noun.FanzhuanPo;
 import com.scaffold.zmain.db.noun.mapper.CandidateStockMapper;
+import com.scaffold.zmain.db.noun.mapper.FanzhuanMapper;
 import com.scaffold.zmain.utils.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import java.io.*;
@@ -36,9 +37,15 @@ public class StockServiceImpl implements StockService {
     public static ConcurrentMap<String,TongJiVo> tongjiCache=new ConcurrentHashMap<>();
 
 
+    public static List<FanzhuanPo> fanzhuanCache=new ArrayList<>();
+
+
 
     @Autowired
     private CandidateStockMapper candidateStockMapper;
+
+    @Autowired
+    private FanzhuanMapper fanzhuanMapper;
 
     @Autowired
     private MyConfig myConfig;
@@ -142,7 +149,7 @@ public class StockServiceImpl implements StockService {
     public List<ShowTimeVo> queryShowTime() {
         String key="";
         Calendar calendar=Calendar.getInstance();
-        calendar.set(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DATE),21,0,0);  //年月日  也可以具体到时分秒如calendar.set(2015, 10, 12,11,32,52);
+        calendar.set(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DATE),19,0,0);  //年月日  也可以具体到时分秒如calendar.set(2015, 10, 12,11,32,52);
         Date updateDate=calendar.getTime();//date就是你需要的时间
         //当日的更新时间点判断，到底走前一天还是当天的
         String dateString=DateUtil.formatDate(new Date());
@@ -161,8 +168,10 @@ public class StockServiceImpl implements StockService {
             for (int i = 0; i < showTime.size(); i++) {
                 showTimeVos.add(new ShowTimeVo(showTime.get(i),i));
             }
+
             showTimeCache.putIfAbsent(key,showTimeVos);
             tongjiCache.clear();
+            fanzhuanCache.clear();
             doTongji();
             return showTimeVos;
         }
@@ -177,16 +186,22 @@ public class StockServiceImpl implements StockService {
         List<Double> wjdl=new ArrayList<>();
         List<Double> dl=new ArrayList<>();
         List<Double> fanzhuandongli=new ArrayList<>();
-        Integer [] skip=new Integer[]{6,8,11,15,20,26,33,40,60};
-
+        List<Double> chaojilist=new ArrayList<>();
+        Integer [] skip=new Integer[]{1,3,5,10,15,20,25,30,35,40,50,59};
+        HashSet<String> map=new HashSet<>();
         for (int i = 0; i < skip.length; i++) {
-            date=DateUtil.formatDate(DateUtil.afterDay(new Date(),-skip[i]));
-            List<CandidateStockPo> list= candidateStockMapper.findRecent(date);
-
+            map.add(""+skip[i]);
+        }
+        List<String> allRecentDate=candidateStockMapper.timeLimit(70);
+//        date=DateUtil.formatDate(new Date());
+        date=allRecentDate.get(0);
+        for (int i = 0; i < allRecentDate.size(); i++) {
+            if (!map.contains(""+i)){
+                continue;
+            }
+            List<CandidateStockPo> list= candidateStockMapper.findRecent(allRecentDate.get(i),date);
             int fsx=0;
             int fsxtotal=0;
-
-
             int hwj=0;
             int hwjtotal=0;
             int ygzq=0;
@@ -199,6 +214,11 @@ public class StockServiceImpl implements StockService {
             int mydltotal=0;
             int myfanzhuandongli=0;
             int myfanzhuandonglitotal=0;
+
+            int chaoji=0;
+            int chaojitotal=0;
+
+
             for (int j = 0; j < list.size(); j++) {
                 switch (list.get(j).getZsm()){
                     case 1:
@@ -249,6 +269,15 @@ public class StockServiceImpl implements StockService {
                             mydltotal = mydltotal + 1;
                         }
                         break;
+                    case 7:
+                        if (list.get(j).getProfit()>0){
+                            chaoji=chaoji+1;
+                        }
+                        if (list.get(j).getProfit()!=0){
+                            chaojitotal=chaojitotal+1;
+                        }
+                        break;
+
                     case 99:
                         if (list.get(j).getProfit()>0){
                             myfanzhuandongli=myfanzhuandongli+1;
@@ -317,6 +346,17 @@ public class StockServiceImpl implements StockService {
                 dl.add(0.0);
             }
 
+            if (chaoji!=0){
+                double d = 1.0*chaoji/chaojitotal;
+                BigDecimal bd = new BigDecimal(d);
+                BigDecimal bd2 = bd.setScale(2, BigDecimal.ROUND_HALF_UP);
+                Double get_double=Double.parseDouble(bd2.toString());
+                chaojilist.add(get_double);
+            }else{
+                chaojilist.add(0.0);
+            }
+
+
             if (myfanzhuandonglitotal!=0){
                 double d = 1.0*myfanzhuandongli/myfanzhuandonglitotal;
                 BigDecimal bd = new BigDecimal(d);
@@ -360,9 +400,20 @@ public class StockServiceImpl implements StockService {
         tongjiCache.putIfAbsent("dl", vo);
 
         vo=new TongJiVo();
+        vo.setHistory(chaojilist);
+        vo.setTime(times);
+        tongjiCache.putIfAbsent("chaoji", vo);
+
+
+        vo=new TongJiVo();
         vo.setHistory(fanzhuandongli);
         vo.setTime(times);
         tongjiCache.putIfAbsent("fanzhuandongli", vo);
+
+
+        List<FanzhuanPo> list = fanzhuanMapper.find();
+        list=list.stream().sorted(Comparator.comparing(c->c.getDate())).collect(Collectors.toList());
+        fanzhuanCache=list;
     }
 
     @Override
@@ -379,6 +430,7 @@ public class StockServiceImpl implements StockService {
         tongJiVos.add(tongjiCache.get("wjdl"));
         tongJiVos.add(tongjiCache.get("dl"));
         tongJiVos.add(tongjiCache.get("fanzhuandongli"));
+        tongJiVos.add(tongjiCache.get("chaoji"));
         return tongJiVos;
     }
 

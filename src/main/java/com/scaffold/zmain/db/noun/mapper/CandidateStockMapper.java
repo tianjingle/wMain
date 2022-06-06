@@ -20,7 +20,7 @@ public interface CandidateStockMapper {
 
     List<String> timeLimit(@Param("limit") int limit);
 
-    List<CandidateStockPo> findRecent(@Param("date") String date);
+    List<CandidateStockPo> findRecent(@Param("date") String date,@Param("now") String now);
 
     List<CandidateStockPo> findAllTemp();
 }
