@@ -1,5 +1,6 @@
 package com.scaffold.zmain.application;
 
+import com.scaffold.zmain.api.HomeController;
 import com.scaffold.zmain.api.vo.ShowTimeVo;
 import com.scaffold.zmain.api.vo.TongJiVo;
 import com.scaffold.zmain.application.service.StockService;
@@ -172,6 +173,8 @@ public class StockServiceImpl implements StockService {
             showTimeCache.putIfAbsent(key,showTimeVos);
             tongjiCache.clear();
             fanzhuanCache.clear();
+            //每日清空一下股票详情的缓存
+            HomeController.clearDetailCache();
             doTongji();
             return showTimeVos;
         }

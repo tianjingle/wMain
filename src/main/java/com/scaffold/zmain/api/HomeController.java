@@ -36,6 +36,16 @@ import java.util.stream.Collectors;
 public class HomeController {
 
 
+    //加个股票详情的缓存
+    public static HashMap<String,CandidateStockPo> detailCache=new HashMap<>();
+
+    /**
+     * 每天下午7点清空缓存数据
+     */
+    public static void clearDetailCache(){
+        detailCache.clear();
+    }
+
     @Autowired
     private StockService stockService;
 
@@ -240,6 +250,13 @@ public class HomeController {
         }
     }
 
+    /**
+     * detail详情添加缓存，防止访问量过大
+     * @param code
+     * @param response
+     * @return
+     * @throws IOException
+     */
     @GetMapping(value = "/detail/{code}")
     public ModelAndView detail(@PathVariable String code, HttpServletResponse response) throws IOException {
         String dfcf="http://quote.eastmoney.com/";
@@ -252,7 +269,17 @@ public class HomeController {
             ImageByPython.draw(code.replace("_","."));
 //            response.sendRedirect(dfcfDetail);
         }
-        CandidateStockPo po=stockService.queryByCode(code.replace("_","."));
+        CandidateStockPo po=null;
+        if (detailCache.containsKey(code)){
+            po=detailCache.get(code);
+        }else{
+            synchronized (detailCache){
+                if (!detailCache.containsKey(code)){
+                    po=stockService.queryByCode(code.replace("_","."));
+                    detailCache.put(code,po);
+                }
+            }
+        }
         po.setImage("/zMain/file/"+po.getCode().replace(".","_"));
         ModelAndView modelAndView=new ModelAndView("detail");
         modelAndView.addObject("po",po);

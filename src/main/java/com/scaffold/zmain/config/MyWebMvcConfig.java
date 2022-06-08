@@ -50,6 +50,6 @@ public class MyWebMvcConfig extends WebMvcConfigurationSupport {
         //第一个方法设置访问路径前缀，第二个方法设置资源路径
         registry.addResourceHandler("/static/**")
                 .addResourceLocations("classpath:/static/");
-        super.addResourceHandlers(registry);
+//        super.addResourceHandlers(registry);
     }
 }
